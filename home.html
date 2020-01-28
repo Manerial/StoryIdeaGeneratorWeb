@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<header>
+    <meta charset="UTF-8">
+    <title>Story Idea Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+
+    <script type="text/javascript" src="resources\writting options\styles.js"></script>
+    <script type="text/javascript" src="resources\writting options\themes.js"></script>
+
+    <script type="text/javascript" src="resources\persona\roles.js"></script>
+    <script type="text/javascript" src="resources\persona\bad_traits.js"></script>
+    <script type="text/javascript" src="resources\persona\boys.js"></script>
+    <script type="text/javascript" src="resources\persona\caracteristics.js"></script>
+    <script type="text/javascript" src="resources\persona\girls.js"></script>
+    <script type="text/javascript" src="resources\persona\good_traits.js"></script>
+    <script type="text/javascript" src="resources\persona\handicaps.js"></script>
+    <script type="text/javascript" src="resources\persona\jobs.js"></script>
+
+    <script type="text/javascript" src="resources\persona\title\adjectives.js"></script>
+    <script type="text/javascript" src="resources\persona\title\prefixes.js"></script>
+    <script type="text/javascript" src="resources\persona\title\suffixes.js"></script>
+    
+    <script type="text/javascript" src="resources\persona\physical\eyes_colors.js"></script>
+    <script type="text/javascript" src="resources\persona\physical\face_shapes.js"></script>
+    <script type="text/javascript" src="resources\persona\physical\hair_colors.js"></script>
+    <script type="text/javascript" src="resources\persona\physical\hair_styles.js"></script>
+    <script type="text/javascript" src="resources\persona\physical\morphologies.js"></script>
+</header>
+
+<body>
+    <div class="container">
+        <h1>Story Idea Generator</h1>
+        
+        <div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm">
+                        <label for="generationNumber" class="form-check-label">Choisissez le nombre d'éléments à générer:</label>
+                        <input id="generationNumber" type="number" min="1" max="12" class="form-control" required></input>
+                    </div>
+                    <div class="col-sm">
+                        <label for="generationTool" class="form-check-label">Sélectionnez un type d'élément</label>
+                        <select id="generationTool" class="form-control">
+                            <option value="w">Style</option>
+                            <option value="p">Personnages</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <p id="createList" class="btn btn-primary">Générer</p id="wordNumber">
+            </div>
+        </div>
+
+        <div>
+            <div id="Persona" class="row" style="margin:0px"></div>
+            <div id="Writing" class="row" style="margin:0px"></div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">See more tools there:
+            <a href="https://github.com/Manerial"> https://github.com/Manerial</a>
+        </div>
+    </footer>
+</body>
