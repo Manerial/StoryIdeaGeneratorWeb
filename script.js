@@ -1,5 +1,26 @@
 $(document).ready(function() {
+    function hideContrainte() {
+        var generationTool = $("#generationTool").val();
+        if(generationTool == "p") {
+            $("#contraintesC").hide();
+            $("#contraintesP").show();
+        } else {
+            $("#contraintesP").hide();
+            $("#contraintesC").show();
+        }
+    }
+
+    hideContrainte();
+    $("#generationTool").change(function(){
+        hideContrainte();
+    });
+
     $("#generationNumber").val(3);
+
+    $("#resetContraintes").click(function(){
+        $("#contraintesP :input").val("");
+        $("#contraintesC :input").val("");
+    });
 
     $("#createList").click(function(){
         var generationNumber = $("#generationNumber").val();
@@ -21,7 +42,10 @@ $(document).ready(function() {
             }
             writing.show();
         }
-        $(".card:nth-child(2n)").each(function() {
+        $("#Persona .card:nth-child(2n)").each(function() {
+            $(this).addClass("bg-dark text-white");
+        });
+        $("#Writing .card:nth-child(2n)").each(function() {
             $(this).addClass("bg-dark text-white");
         });
     });
@@ -54,10 +78,18 @@ $(document).ready(function() {
     }
 
     function getRandomTheme() {
+        var c_value = $("#c_theme").val();
+        if(c_value != "") {
+            return c_value;
+        }
         return getRandomValueInArray(themes);
     }
 
     function getRandomStyle() {
+        var c_value = $("#c_style").val();
+        if(c_value != "") {
+            return c_value;
+        }
         return getRandomValueInArray(styles);
     }
 
@@ -75,16 +107,25 @@ $(document).ready(function() {
             encapsulate("Age:", persona.age) +
             encapsulate("Job:", persona.job) +
             encapsulate("Role:", persona.role) +
+            encapsulate("Titre:", persona.title) +
             encapsulatePhysical(persona.physical) +
             encapsulateTraits(persona.traits) +
             endCapsule + endDiv + endDiv;
     }
 
     function getRandomAge() {
+        var c_value = $("#c_age").val();
+        if(c_value != "") {
+            return c_value;
+        }
         return Math.floor(Math.random()*100);
     }
 
     function getRandomName(gender) {
+        var c_value = $("#c_name").val();
+        if(c_value != "") {
+            return c_value;
+        }
         var name = "";
         if (gender == 1) {
             name = getRandomValueInArray(boys);
@@ -108,18 +149,34 @@ $(document).ready(function() {
     }
 
     function getRandomHairColor() {
+        var c_value = $("#c_hair_color").val();
+        if(c_value != "") {
+            return c_value;
+        }
         return getRandomValueInArray(hair_colors);
     }
 
     function getRandomHairStyle() {
+        var c_value = $("#c_hair_style").val();
+        if(c_value != "") {
+            return c_value;
+        }
         return getRandomValueInArray(hair_styles);
     }
 
     function getRandomEyesColor() {
+        var c_value = $("#c_eyes_color").val();
+        if(c_value != "") {
+            return c_value;
+        }
         return getRandomValueInArray(eyes_colors);
     }
 
     function getRandomFaceShape() {
+        var c_value = $("#c_face_shape").val();
+        if(c_value != "") {
+            return c_value;
+        }
         return getRandomValueInArray(face_shapes);
     }
 
@@ -128,6 +185,10 @@ $(document).ready(function() {
     }
 
     function getRandomHeight(age, gender) {
+        var c_value = $("#c_height").val();
+        if(c_value != "") {
+            return c_value;
+        }
         var height = 0;
         if (age < 18) {
             height = getRandomIntoInterval(40 + age*5, 100 + age*5);
@@ -140,12 +201,20 @@ $(document).ready(function() {
     }
 
     function getRandomWeight(height) {
+        var c_value = $("#c_weight").val();
+        if(c_value != "") {
+            return c_value;
+        }
         var minWeight = height * height * 1.5;
         var maxWeight = height * height * 3.1;
         return getRandomIntoInterval(minWeight, maxWeight);
     }
 
     function getRandomMorphology(weight, height) {
+        var c_value = $("#c_morphology").val();
+        if(c_value != "") {
+            return c_value;
+        }
         var BMI = getBMI(weight, height);
         var morphology = "";
         var debug = 0;
@@ -161,6 +230,10 @@ $(document).ready(function() {
     }
 
     function getRandomRole(age) {
+        var c_value = $("#c_role").val();
+        if(c_value != "") {
+            return c_value;
+        }
         var role = "";
         do{
             role = getRandomKeyInJson(roles);
@@ -202,6 +275,10 @@ $(document).ready(function() {
     }
 
     function getRandomJob(age) {
+        var c_value = $("#c_job").val();
+        if(c_value != "") {
+            return c_value;
+        }
         var job = "Aucun";
         if (age > 18) {
 			job = getRandomValueInArray(jobs);
@@ -216,12 +293,32 @@ $(document).ready(function() {
         var n_caracteristics = getRandomIntoInterval(1, 5);
         
         var traits = {};
-        if (n_good_traits > 0) traits.good_traits = addTraits(n_good_traits, good_traits);
-        if (n_bad_traits > 0) traits.bad_traits = addTraits(n_bad_traits, bad_traits);
-        if (n_handicaps > 0) traits.handicaps = addTraits(n_handicaps, handicaps);
-        if (n_caracteristics > 0) traits.caracteristics = addTraits(n_caracteristics, caracteristics);
+        
+        var c_value = $("#c_good_traits").val();
+        traits.good_traits = getTraitIfNotEmpty(c_value, n_good_traits, good_traits);
+        
+        c_value = $("#c_bad_traits").val();
+        traits.bad_traits = getTraitIfNotEmpty(c_value, n_bad_traits, bad_traits);
+        
+        c_value = $("#c_handicaps").val();
+        traits.handicaps = getTraitIfNotEmpty(c_value, n_handicaps, handicaps);
+        
+        c_value = $("#c_caracteristics").val();
+        traits.caracteristics = getTraitIfNotEmpty(c_value, n_caracteristics, caracteristics);
 
         return traits;
+    }
+
+    function getTraitIfNotEmpty(c_value, n_value, values) {
+        if(c_value != "") {
+            return stringToJsonArray(c_value);
+        } else if (n_value > 0) {
+            return addTraits(n_value, values);
+        }
+    }
+
+    function stringToJsonArray(string) {
+        return JSON.parse("[\"" + string.replace(/,/g, "\", \"") + "\"]")
     }
 
     function addTraits(numberOfTraits, data) {
@@ -237,6 +334,10 @@ $(document).ready(function() {
     }
 
     function getRandomTitle() {
+        var c_value = $("#c_title").val();
+        if(c_value != "") {
+            return c_value;
+        }
         return getRandomValueInArray(prefixes) + " " +
         getRandomValueInArray(suffixes) + " " +
         getRandomValueInArray(adjectives);
