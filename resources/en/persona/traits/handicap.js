@@ -1,4 +1,4 @@
-handicaps = [
+handicap = [
     "Tetraplegique",
     "Paraplegique",
     "Cancéreux",

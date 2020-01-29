@@ -1,150 +1,107 @@
 <!DOCTYPE html>
-<header>
+<head>
     <meta charset="UTF-8">
     <title>Story Idea Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js">
-                            </script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js">
-                            </script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js">
-                            </script>
-    <script type="text/javascript" src="script.js">
-                            </script>
-
-    <script type="text/javascript" src="resources\writting options\styles.js">
-                            </script>
-    <script type="text/javascript" src="resources\writting options\themes.js">
-                            </script>
-
-    <script type="text/javascript" src="resources\persona\roles.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\bad_traits.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\boys.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\caracteristics.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\girls.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\good_traits.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\handicaps.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\jobs.js">
-                            </script>
-
-    <script type="text/javascript" src="resources\persona\title\adjectives.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\title\prefixes.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\title\suffixes.js">
-                            </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
     
-    <script type="text/javascript" src="resources\persona\physical\eyes_colors.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\physical\face_shapes.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\physical\hair_colors.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\physical\hair_styles.js">
-                            </script>
-    <script type="text/javascript" src="resources\persona\physical\morphologies.js">
-                            </script>
-</header>
+    <script>
+        var langues = ["fr", "en"];
+        var resources = "resources\\";
+        var lang = findGetParameter("l");
+        var switchLang = "";
+        lang = (langues.includes(lang)) ? lang : langues[0];
+        switchLang = (lang == langues[0]) ? langues[1] : langues[0];
+        lang = lang + "\\";
+        var writing_options = "writting options\\";
+        var persona = "persona\\";
+        var title = "title\\";
+        var physical = "physical\\";
+        var traits = "traits\\";
 
+        importScript(resources + lang + "parameters.js");
+        importScript(resources + lang + writing_options + "styles.js");
+        importScript(resources + lang + writing_options + "themes.js");
+        
+        importScript(resources + lang + persona + "roles.js");
+        importScript(resources + lang + persona + "boys.js");
+        importScript(resources + lang + persona + "girls.js");
+        importScript(resources + lang + persona + "jobs.js");
+
+        importScript(resources + lang + persona + traits + "bad_traits.js");
+        importScript(resources + lang + persona + traits + "caracteristics.js");
+        importScript(resources + lang + persona + traits + "good_traits.js");
+        importScript(resources + lang + persona + traits + "handicap.js");
+
+        importScript(resources + lang + persona + title + "adjectives.js");
+        importScript(resources + lang + persona + title + "prefixes.js");
+        importScript(resources + lang + persona + title + "suffixes.js");
+
+        importScript(resources + lang + persona + physical + "eyes_colors.js");
+        importScript(resources + lang + persona + physical + "face_shapes.js");
+        importScript(resources + lang + persona + physical + "hair_colors.js");
+        importScript(resources + lang + persona + physical + "hair_styles.js");
+        importScript(resources + lang + persona + physical + "morphologies.js");
+
+        importScript("script.js");
+
+        function importScript(src) {
+            var import_script = document.createElement('script');
+            import_script.setAttribute('src', src);
+            document.head.appendChild(import_script);
+        }
+
+        function findGetParameter(parameterName) {
+            var result = null,
+                tmp = [];
+            location.search
+                .substr(1)
+                .split("&")
+                .forEach(function (item) {
+                tmp = item.split("=");
+                if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+                });
+            return result;
+        }
+    </script>
+</header>
 <body>
     <div class="container">
-        <h1>Story Idea Generator</h1>
+        <button id="lang"></button>
+
+        <h1 id="title"></h1>
         
         <div>
             <div class="form-group">
                 <div class="row">
                     <div class="col-sm">
-                        <label for="generationNumber" class="form-check-label">Choisissez le nombre d'éléments à générer:</label>
-                        <input id="generationNumber" type="number" min="1" max="12" class="form-control" required>
-                            </input>
+                        <label id="generationNumberLabel" for="generationNumber" class="form-check-label"></label>
+                        <input id="generationNumber" type="number" min="1" max="12" class="form-control" required></input>
                     </div>
                     <div class="col-sm">
-                        <label for="generationTool" class="form-check-label">Sélectionnez un type d'élément</label>
-                        <select id="generationTool" class="form-control">
-                            <option value="w">Style</option>
-                            <option value="p">Personnages</option>
-                        </select>
+                        <label id="generationToolLabel" for="generationTool" class="form-check-label"></label>
+                        <select id="generationTool" class="form-control"></select>
                     </div>
                 </div>
             </div>
             
             <div class="form-group">
-                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".collapse" aria-expanded="false" aria-controls="collapseExample">
-                    Contraintes
-                </button>
-                <button id="resetContraintes" class="btn btn-primary" type="button">
-                    Nettoyer contraintes
-                </button>
+                <button id="resetContraintes" class="btn btn-primary" type="button"></button>
+                <button id="contrainteButton" class="btn btn-primary" type="button" data-toggle="collapse" data-target=".collapse" aria-expanded="false" aria-controls="collapse"></button>
             </div>
             <div class="form-group">
                 <div class="collapse">
-                    <div class="card card-body col-lg-5" id="contraintesP">
-                        <dl class="row">
-                            <dt class="col-lg-5">Nom:</dt>
-                            <dd class="col-lg-7"><input type="text" id="c_name"></dd>
-                            <dt class="col-lg-5">Age:</dt>
-                            <dd class="col-lg-7"><input type="number" min="0" id="c_age">ans</dd>
-                            <dt class="col-lg-5">Job:</dt>
-                            <dd class="col-lg-7"><input type="text" id="c_job"></dd>
-                            <dt class="col-lg-5">Role:</dt>
-                            <dd class="col-lg-7"><input type="text" id="c_role"></dd>
-                            <dt class="col-lg-5">Titre:</dt>
-                            <dd class="col-lg-7"><input type="text" id="c_title"></dd>
-                            <dt class="col-lg-5">Physique:</dt>
-                            <dd class="col-lg-7"></dd>
-                            <dl class="row">
-                            <dt class="col-lg-5">Taille:</dt>
-                                <dd class="col-lg-7"><input type="number" min="0" id="c_height">cm</dd>
-                                <dt class="col-lg-5">Poids:</dt>
-                                <dd class="col-lg-7"><input type="number" min="0" id="c_weight">g</dd>
-                                <dt class="col-lg-5">Couleur cheveux:</dt>
-                                <dd class="col-lg-7"><input type="text" id="c_hair_color"></dd>
-                                <dt class="col-lg-5">Coiffure:</dt>
-                                <dd class="col-lg-7"><input type="text" id="c_hair_style"></dd>
-                                <dt class="col-lg-5">Couleur yeux:</dt>
-                                <dd class="col-lg-7"><input type="text" id="c_eyes_color"></dd>
-                                <dt class="col-lg-5">Visage:</dt>
-                                <dd class="col-lg-7"><input type="text" id="c_face_shape"></dd>
-                                <dt class="col-lg-5">Morphologie:</dt>
-                                <dd class="col-lg-7"><input type="text" id="c_morphology"></dd>
-                            </dl>
-                            <dt class="col-lg-5">Traits:</dt>
-                            <dd class="col-lg-7">
-                            </dd>
-                            <dl class="row">
-                                <dt class="col-lg-5">Bon:</dt>
-                                <dd class="col-lg-7"><textarea id="c_good_traits" placeholder="a, b, c"></textarea></dd>
-                                <dt class="col-lg-5">Mal:</dt>
-                                <dd class="col-lg-7"><textarea id="c_bad_traits" placeholder="a, b, c"></textarea></dd>
-                                <dt class="col-lg-5">Caractère:</dt>
-                                <dd class="col-lg-7"><textarea id="c_caracteristics" placeholder="a, b, c"></textarea></dd>
-                                <dt class="col-lg-5">Handicapes:</dt>
-                                <dd class="col-lg-7"><textarea id="c_handicaps" placeholder="a, b, c"></textarea></dd>
-                            </dl>
-                        </dl>
-                    </div>
-                    <div class="card card-body col-lg-5" id="contraintesC">
-                        <dl class="row">
-                            <dt class="col-lg-5">Theme:</dt>
-                            <dd class="col-lg-7"><input type="text" id="c_theme"></dd>
-                            <dt class="col-lg-5">Style:</dt>
-                            <dd class="col-lg-7"><input type="text" id="c_style"></dd>
-                        </dl>
-                    </div>
+                    <div class="card card-body col-lg-5" id="constraintP"></div>
+                    <div class="card card-body col-lg-5" id="constraintW"></div>
                 </div>
             </div>
 
             <div class="form-group">
-                <p id="createList" class="btn btn-primary">Générer</p id="wordNumber">
+                <p id="createList" class="btn btn-primary"></p id="wordNumber">
             </div>
         </div>
 
@@ -154,8 +111,6 @@
         </div>
     </div>
     <footer class="footer">
-        <div class="container">See more tools there:
-            <a href="https://github.com/Manerial"> https://github.com/Manerial</a>
-        </div>
+        <div class="container"></div>
     </footer>
 </body>

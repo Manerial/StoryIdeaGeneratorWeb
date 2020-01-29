@@ -1,25 +1,65 @@
 $(document).ready(function() {
-    function hideContrainte() {
+    var beginCard = "<div class=\"card col-sm-6 col-lg-4\">";
+    var beginCardBody = "<div class=\"card-body\">";
+    var endDiv = "</div>";
+
+    var beginCapsule = "<dl class=\"row\">";
+    var endCapsule = "</dl>";
+    var beginTitle = "<dt class=\"col-lg-5\">";
+    var endTitle = "</dt>";
+    var beginContent = "<dd class=\"col-lg-7\">"
+    var endContent = "</dd>"
+
+    initDisplay();
+
+    function initDisplay() {
+        
+        $("#lang").html(switchLang);
+        $("#lang").click(function() {
+            var url = window.location.pathname;
+            window.location = url + "?l=" + switchLang;
+        });
+        selectContrainte();
+        $("#generationNumber").val(3);
+        $("#contrainteButton").html(param.constraint.show);
+        $("#title").html(param.title);
+        $("#generationNumberLabel").html(param.generationNumber.label);
+        $("#generationToolLabel").html(param.generationTool.label);
+        $('#generationTool').append(new Option(param.generationTool.option.writing.label, param.generationTool.option.writing.value));
+        $('#generationTool').append(new Option(param.generationTool.option.persona.label, param.generationTool.option.persona.value));
+        $("#resetContraintes").html(param.constraint.reset);
+        $("footer .container").html(param.footer);
+        $("#createList").html(param.generationTool.generate);
+        $("#constraintP").html(getConstraintPersonaCard());
+        $("#constraintW").html(getConstraintWritingCard());
+    }
+
+    function selectContrainte() {
         var generationTool = $("#generationTool").val();
-        if(generationTool == "p") {
-            $("#contraintesC").hide();
-            $("#contraintesP").show();
+        if(generationTool == param.generationTool.option.persona.value) {
+            $("#constraintW").hide();
+            $("#constraintP").show();
         } else {
-            $("#contraintesP").hide();
-            $("#contraintesC").show();
+            $("#constraintP").hide();
+            $("#constraintW").show();
         }
     }
 
-    hideContrainte();
     $("#generationTool").change(function(){
-        hideContrainte();
+        selectContrainte();
     });
 
-    $("#generationNumber").val(3);
+    $('.collapse').on('hide.bs.collapse', function () {
+        $("#contrainteButton").html(param.constraint.show);
+    });
+
+    $('.collapse').on('show.bs.collapse', function () {
+        $("#contrainteButton").html(param.constraint.hide);
+    });
 
     $("#resetContraintes").click(function(){
-        $("#contraintesP :input").val("");
-        $("#contraintesC :input").val("");
+        $("#constraintP :input").val("");
+        $("#constraintW :input").val("");
     });
 
     $("#createList").click(function(){
@@ -50,16 +90,68 @@ $(document).ready(function() {
         });
     });
 
-    var beginCard = "<div class=\"card col-sm-6 col-lg-4\">";
-    var beginCardBody = "<div class=\"card-body\">";
-    var endDiv = "</div>";
+    /******************************************************/
+    /*******************CONSTRAINT CARDS*******************/
+    /******************************************************/
 
-    var beginCapsule = "<dl class=\"row\">";
-    var endCapsule = "</dl>";
-    var beginTitle = "<dt class=\"col-lg-5\">";
-    var endTitle = "</dt>";
-    var beginContent = "<dd class=\"col-lg-7\">"
-    var endContent = "</dd>"
+    function getConstraintWritingCard() {
+        return beginCapsule + 
+        encapsulate(param.writing.theme, getInputTextWithId("c_theme")) +
+        encapsulate(param.writing.style, getInputTextWithId("c_style")) +
+        endCapsule;
+    }
+
+    function getConstraintPersonaCard() {
+        return beginCapsule + 
+        encapsulate(param.persona.name, getInputTextWithId("c_name")) +
+        encapsulate(param.persona.age, getInputNumberWithId("c_age")) +
+        encapsulate(param.persona.job, getInputTextWithId("c_job")) +
+        encapsulate(param.persona.role, getInputTextWithId("c_role")) +
+        encapsulate(param.persona.title, getInputTextWithId("c_title")) +
+        encapsulateConstraintPhysical() +
+        encapsulateConstraintTraits() +
+        endCapsule;
+    }
+    
+    function encapsulateConstraintPhysical() {
+        return encapsulate(param.persona.physical.string, "") +
+        beginCapsule +
+        encapsulate(param.persona.physical.gender.string, getInputTextWithId("c_gender")) +
+        encapsulate(param.persona.physical.height, getInputNumberWithId("c_height")) +
+        encapsulate(param.persona.physical.weight, getInputNumberWithId("c_weight")) +
+        encapsulate(param.persona.physical.hair_color, getInputTextWithId("c_hair_color")) +
+        encapsulate(param.persona.physical.hair_style, getInputTextWithId("c_hair_style")) +
+        encapsulate(param.persona.physical.eyes_color, getInputTextWithId("c_eyes_color")) +
+        encapsulate(param.persona.physical.face_shape, getInputTextWithId("c_face_shape")) +
+        encapsulate(param.persona.physical.morphology, getInputTextWithId("c_morphology")) +
+        endCapsule;
+    }
+    
+    function encapsulateConstraintTraits() {
+        return encapsulate(param.persona.traits.string, "") +
+        beginCapsule +
+        encapsulate(param.persona.traits.good_traits, getTextareaWithId("c_good_traits")) +
+        encapsulate(param.persona.traits.bad_traits, getTextareaWithId("c_bad_traits")) +
+        encapsulate(param.persona.traits.caracteristics, getTextareaWithId("c_caracteristics")) +
+        encapsulate(param.persona.traits.handicap, getTextareaWithId("c_handicap")) +
+        endCapsule;
+    }
+
+    function getInputTextWithId(id) {
+        return "<input type=\"text\" id=\"" + id + "\">";
+    }
+
+    function getInputNumberWithId(id) {
+        return "<input type=\"number\" id=\"" + id + "\">";
+    }
+
+    function getTextareaWithId(id) {
+        return "<textarea id=\"" + id + "\" placeholder=\"a, b, c\"></textarea>";
+    }
+
+    /*******************************************************/
+    /**********************ENCAPSULATE**********************/
+    /*******************************************************/
 
     function encapsulate(title, value) {
         var eTitle = beginTitle + title + endTitle;
@@ -72,8 +164,8 @@ $(document).ready(function() {
         writing.theme = getRandomTheme();
         writing.style = getRandomStyle();
         return beginCard + beginCardBody + beginCapsule + 
-            encapsulate("Theme:", writing.theme) +
-            encapsulate("Style:", writing.style) +
+            encapsulate(param.writing.theme, writing.theme) +
+            encapsulate(param.writing.style, writing.style) +
             endCapsule + endDiv + endDiv;
     }
 
@@ -103,11 +195,11 @@ $(document).ready(function() {
         persona.traits = getRandomTraits();
         persona.title = getRandomTitle();
         return beginCard + beginCardBody + beginCapsule + 
-            encapsulate("Nom:", persona.name) +
-            encapsulate("Age:", persona.age) +
-            encapsulate("Job:", persona.job) +
-            encapsulate("Role:", persona.role) +
-            encapsulate("Titre:", persona.title) +
+            encapsulate(param.persona.name, persona.name) +
+            encapsulate(param.persona.age, persona.age) +
+            encapsulate(param.persona.job, persona.job) +
+            encapsulate(param.persona.role, persona.role) +
+            encapsulate(param.persona.title, persona.title) +
             encapsulatePhysical(persona.physical) +
             encapsulateTraits(persona.traits) +
             endCapsule + endDiv + endDiv;
@@ -181,7 +273,7 @@ $(document).ready(function() {
     }
 
     function getRandomGender() {
-        return Math.floor(Math.random());
+        return getRandomIntoInterval(0,1);
     }
 
     function getRandomHeight(age, gender) {
@@ -279,7 +371,7 @@ $(document).ready(function() {
         if(c_value != "") {
             return c_value;
         }
-        var job = "Aucun";
+        var job = param.none;
         if (age > 18) {
 			job = getRandomValueInArray(jobs);
 		}
@@ -289,7 +381,7 @@ $(document).ready(function() {
     function getRandomTraits() {
         var n_good_traits = getRandomIntoInterval(1, 3);
 		var n_bad_traits = getRandomIntoInterval(0, 2);
-		var n_handicaps = getRandomIntoInterval(0, getRandomIntoInterval(0, getRandomIntoInterval(0, 3)));
+		var n_handicap = getRandomIntoInterval(0, getRandomIntoInterval(0, getRandomIntoInterval(0, 3)));
         var n_caracteristics = getRandomIntoInterval(1, 5);
         
         var traits = {};
@@ -300,8 +392,8 @@ $(document).ready(function() {
         c_value = $("#c_bad_traits").val();
         traits.bad_traits = getTraitIfNotEmpty(c_value, n_bad_traits, bad_traits);
         
-        c_value = $("#c_handicaps").val();
-        traits.handicaps = getTraitIfNotEmpty(c_value, n_handicaps, handicaps);
+        c_value = $("#c_handicap").val();
+        traits.handicap = getTraitIfNotEmpty(c_value, n_handicap, handicap);
         
         c_value = $("#c_caracteristics").val();
         traits.caracteristics = getTraitIfNotEmpty(c_value, n_caracteristics, caracteristics);
@@ -363,31 +455,34 @@ $(document).ready(function() {
     }
     
     function encapsulatePhysical(physical) {
-        return encapsulate("Physique:", "") +
+        var maleStr = param.persona.physical.gender.male;
+        var femaleStr = param.persona.physical.gender.female;
+        return encapsulate(param.persona.physical.string, "") +
         beginCapsule +
-        encapsulate("Taille:", physical.height/100 + "m") +
-        encapsulate("Poids:", (physical.weight/1000).toFixed(1) + "kg") +
-        encapsulate("Couleur cheveux:", physical.hair_color) +
-        encapsulate("Coiffure:", physical.hair_style) +
-        encapsulate("Couleur yeux:", physical.eyes_color) +
-        encapsulate("Visage:", physical.face_shape) +
-        encapsulate("Morphologie:", physical.morphology) +
+        encapsulate(param.persona.physical.gender.string, physical.gender == 1 ? maleStr : femaleStr) +
+        encapsulate(param.persona.physical.height, physical.height/100 + "m") +
+        encapsulate(param.persona.physical.weight, (physical.weight/1000).toFixed(1) + "kg") +
+        encapsulate(param.persona.physical.hair_color, physical.hair_color) +
+        encapsulate(param.persona.physical.hair_style, physical.hair_style) +
+        encapsulate(param.persona.physical.eyes_color, physical.eyes_color) +
+        encapsulate(param.persona.physical.face_shape, physical.face_shape) +
+        encapsulate(param.persona.physical.morphology, physical.morphology) +
         endCapsule;
     }
     
     function encapsulateTraits(traits) {
-        return encapsulate("Traits:", "") +
+        return encapsulate(param.persona.traits.string, "") +
         beginCapsule +
-        encapsulate("Bon:", stringifyArray(traits.good_traits)) +
-        encapsulate("Mal:", stringifyArray(traits.bad_traits)) +
-        encapsulate("Caractère:", stringifyArray(traits.caracteristics)) +
-        encapsulate("Handicapes:", stringifyArray(traits.handicaps)) +
+        encapsulate(param.persona.traits.good_traits, stringifyArray(traits.good_traits)) +
+        encapsulate(param.persona.traits.bad_traits, stringifyArray(traits.bad_traits)) +
+        encapsulate(param.persona.traits.caracteristics, stringifyArray(traits.caracteristics)) +
+        encapsulate(param.persona.traits.handicap, stringifyArray(traits.handicap)) +
         endCapsule;
     }
 
     function stringifyArray(array) {
         if(array == undefined) {
-            return "Aucun";
+            return param.none;
         }
         return array.toString().replace(/,/g, ",</br>");
     }
