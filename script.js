@@ -10,15 +10,42 @@ $(document).ready(function() {
     var beginContent = "<dd class=\"col-lg-7\">"
     var endContent = "</dd>"
 
+    var beginInputText = "<input type=\"text\" id=\"";
+    var beginInputNumber = "<input type=\"number\" id=\"";
+    var endInput = "\">";
+    var beginTextarea = "<textarea id=\"";
+    var endTextarea = "\" placeholder=\"a, b, c\"></textarea>";
+
     initDisplay();
 
+    $("#lang").click(function() {
+        var url = window.location.pathname;
+        window.location = url + "?l=" + switchLang;
+    });
+
+    $("#generationTool").change(function(){
+        selectContrainte();
+    });
+
+    $('.collapse').on('hide.bs.collapse', function () {
+        $("#contrainteButton").html(param.constraint.show);
+    });
+
+    $('.collapse').on('show.bs.collapse', function () {
+        $("#contrainteButton").html(param.constraint.hide);
+    });
+
+    $("#resetContraintes").click(function(){
+        $("#constraintP :input").val("");
+        $("#constraintW :input").val("");
+    });
+
+    $("#createList").click(function(){
+        generateCards();
+    });
+
     function initDisplay() {
-        
         $("#lang").html(switchLang);
-        $("#lang").click(function() {
-            var url = window.location.pathname;
-            window.location = url + "?l=" + switchLang;
-        });
         selectContrainte();
         $("#generationNumber").val(3);
         $("#contrainteButton").html(param.constraint.show);
@@ -45,24 +72,7 @@ $(document).ready(function() {
         }
     }
 
-    $("#generationTool").change(function(){
-        selectContrainte();
-    });
-
-    $('.collapse').on('hide.bs.collapse', function () {
-        $("#contrainteButton").html(param.constraint.show);
-    });
-
-    $('.collapse').on('show.bs.collapse', function () {
-        $("#contrainteButton").html(param.constraint.hide);
-    });
-
-    $("#resetContraintes").click(function(){
-        $("#constraintP :input").val("");
-        $("#constraintW :input").val("");
-    });
-
-    $("#createList").click(function(){
+    function generateCards() {
         var generationNumber = $("#generationNumber").val();
         var generationTool = $("#generationTool").val();
         var writing = $('#Writing');
@@ -88,76 +98,11 @@ $(document).ready(function() {
         $("#Writing .card:nth-child(2n)").each(function() {
             $(this).addClass("bg-dark text-white");
         });
-    });
-
-    /******************************************************/
-    /*******************CONSTRAINT CARDS*******************/
-    /******************************************************/
-
-    function getConstraintWritingCard() {
-        return beginCapsule + 
-        encapsulate(param.writing.theme, getInputTextWithId("c_theme")) +
-        encapsulate(param.writing.style, getInputTextWithId("c_style")) +
-        endCapsule;
-    }
-
-    function getConstraintPersonaCard() {
-        return beginCapsule + 
-        encapsulate(param.persona.name, getInputTextWithId("c_name")) +
-        encapsulate(param.persona.age, getInputNumberWithId("c_age")) +
-        encapsulate(param.persona.job, getInputTextWithId("c_job")) +
-        encapsulate(param.persona.role, getInputTextWithId("c_role")) +
-        encapsulate(param.persona.title, getInputTextWithId("c_title")) +
-        encapsulateConstraintPhysical() +
-        encapsulateConstraintTraits() +
-        endCapsule;
-    }
-    
-    function encapsulateConstraintPhysical() {
-        return encapsulate(param.persona.physical.string, "") +
-        beginCapsule +
-        encapsulate(param.persona.physical.gender.string, getInputTextWithId("c_gender")) +
-        encapsulate(param.persona.physical.height, getInputNumberWithId("c_height")) +
-        encapsulate(param.persona.physical.weight, getInputNumberWithId("c_weight")) +
-        encapsulate(param.persona.physical.hair_color, getInputTextWithId("c_hair_color")) +
-        encapsulate(param.persona.physical.hair_style, getInputTextWithId("c_hair_style")) +
-        encapsulate(param.persona.physical.eyes_color, getInputTextWithId("c_eyes_color")) +
-        encapsulate(param.persona.physical.face_shape, getInputTextWithId("c_face_shape")) +
-        encapsulate(param.persona.physical.morphology, getInputTextWithId("c_morphology")) +
-        endCapsule;
-    }
-    
-    function encapsulateConstraintTraits() {
-        return encapsulate(param.persona.traits.string, "") +
-        beginCapsule +
-        encapsulate(param.persona.traits.good_traits, getTextareaWithId("c_good_traits")) +
-        encapsulate(param.persona.traits.bad_traits, getTextareaWithId("c_bad_traits")) +
-        encapsulate(param.persona.traits.caracteristics, getTextareaWithId("c_caracteristics")) +
-        encapsulate(param.persona.traits.handicap, getTextareaWithId("c_handicap")) +
-        endCapsule;
-    }
-
-    function getInputTextWithId(id) {
-        return "<input type=\"text\" id=\"" + id + "\">";
-    }
-
-    function getInputNumberWithId(id) {
-        return "<input type=\"number\" id=\"" + id + "\">";
-    }
-
-    function getTextareaWithId(id) {
-        return "<textarea id=\"" + id + "\" placeholder=\"a, b, c\"></textarea>";
     }
 
     /*******************************************************/
-    /**********************ENCAPSULATE**********************/
+    /************************WRITING************************/
     /*******************************************************/
-
-    function encapsulate(title, value) {
-        var eTitle = beginTitle + title + endTitle;
-        var eValue = beginContent + value + endContent;
-        return eTitle + eValue;
-    }
 
     function getRandomWritingCard() {
         var writing = {};
@@ -185,6 +130,10 @@ $(document).ready(function() {
         return getRandomValueInArray(styles);
     }
 
+    /*******************************************************/
+    /************************PERSONA************************/
+    /*******************************************************/
+
     function getRandomPersonaCard() {
         var persona = {};
         persona.age = getRandomAge();
@@ -194,15 +143,7 @@ $(document).ready(function() {
         persona.job = getRandomJob(persona.age);
         persona.traits = getRandomTraits();
         persona.title = getRandomTitle();
-        return beginCard + beginCardBody + beginCapsule + 
-            encapsulate(param.persona.name, persona.name) +
-            encapsulate(param.persona.age, persona.age) +
-            encapsulate(param.persona.job, persona.job) +
-            encapsulate(param.persona.role, persona.role) +
-            encapsulate(param.persona.title, persona.title) +
-            encapsulatePhysical(persona.physical) +
-            encapsulateTraits(persona.traits) +
-            endCapsule + endDiv + endDiv;
+        return encapsulatePersona(persona);
     }
 
     function getRandomAge() {
@@ -226,6 +167,48 @@ $(document).ready(function() {
         }
         return name;
     }
+
+    function getRandomRole(age) {
+        var c_value = $("#c_role").val();
+        if(c_value != "") {
+            return c_value;
+        }
+        var role = "";
+        do{
+            role = getRandomKeyInJson(roles);
+        } while(!checkAge(roles[role], age));
+        return role;
+    }
+
+    function getRandomJob(age) {
+        var c_value = $("#c_job").val();
+        if(c_value != "") {
+            return c_value;
+        }
+        var job = param.none;
+        if (age > 18) {
+			job = getRandomValueInArray(jobs);
+		}
+        return job;
+    }
+
+    function checkAge(ageRankStr, age) {
+        if (ageRankStr.includes("+")) {
+			var ageString = ageRankStr.split("+")[0];
+			var ageRank = parseInt(ageString);
+			return ageRank < age;
+		} else if (ageRankStr.includes("-")) {
+			var ageString = ageRankStr.split("-")[0];
+			var ageRank = parseInt(ageString);
+			return ageRank > age;
+		} else {
+            return ageRankStr == "ALL";
+        }
+    }
+
+    /*******************************************************/
+    /***********************PHYSICAL************************/
+    /*******************************************************/
 
     function getRandomPhysical(age) {
         var physical = {};
@@ -321,32 +304,6 @@ $(document).ready(function() {
         
     }
 
-    function getRandomRole(age) {
-        var c_value = $("#c_role").val();
-        if(c_value != "") {
-            return c_value;
-        }
-        var role = "";
-        do{
-            role = getRandomKeyInJson(roles);
-        } while(!checkAge(roles[role], age));
-        return role;
-    }
-
-    function checkAge(ageRankStr, age) {
-        if (ageRankStr.includes("+")) {
-			var ageString = ageRankStr.split("+")[0];
-			var ageRank = parseInt(ageString);
-			return ageRank < age;
-		} else if (ageRankStr.includes("-")) {
-			var ageString = ageRankStr.split("-")[0];
-			var ageRank = parseInt(ageString);
-			return ageRank > age;
-		} else {
-            return ageRankStr == "ALL";
-        }
-    }
-
     function checkBMI(BMIRankStr, BMI) {
 		var BMIString;
 		var BMIMin = 0;
@@ -366,17 +323,9 @@ $(document).ready(function() {
         return BMIMin <= BMI && BMI <= BMIMax;
     }
 
-    function getRandomJob(age) {
-        var c_value = $("#c_job").val();
-        if(c_value != "") {
-            return c_value;
-        }
-        var job = param.none;
-        if (age > 18) {
-			job = getRandomValueInArray(jobs);
-		}
-        return job;
-    }
+    /*******************************************************/
+    /************************TRAITS*************************/
+    /*******************************************************/
 
     function getRandomTraits() {
         var n_good_traits = getRandomIntoInterval(1, 3);
@@ -409,10 +358,6 @@ $(document).ready(function() {
         }
     }
 
-    function stringToJsonArray(string) {
-        return JSON.parse("[\"" + string.replace(/,/g, "\", \"") + "\"]")
-    }
-
     function addTraits(numberOfTraits, data) {
         var traits = [];
         for(var i = 0; i < numberOfTraits; i++) {
@@ -434,24 +379,28 @@ $(document).ready(function() {
         getRandomValueInArray(suffixes) + " " +
         getRandomValueInArray(adjectives);
     }
-
-    function getRandomValueInArray(array) {
-        return array[Math.floor(Math.random()*array.length)];
-    }
-
-    function getRandomKeyInJson(json) {
-        return getRandomValueInArray(Object.keys(json));
-    }
-
-    function getRandomIntoInterval(min, max) {
-        return Math.floor(Math.random()*(max - min + 1)) + min;
-    }
     
 	function getBMI(weight, height) {
 		var weightKG = weight / 1000;
 		var heightM = height / 100;
 		var BMI = weightKG / (heightM * heightM);
 		return BMI;
+    }
+
+    /*******************************************************/
+    /**********************ENCAPSULATE**********************/
+    /*******************************************************/
+
+    function encapsulatePersona(persona) {
+        return beginCard + beginCardBody + beginCapsule + 
+        encapsulate(param.persona.name, persona.name) +
+        encapsulate(param.persona.age, persona.age) +
+        encapsulate(param.persona.job, persona.job) +
+        encapsulate(param.persona.role, persona.role) +
+        encapsulate(param.persona.title, persona.title) +
+        encapsulatePhysical(persona.physical) +
+        encapsulateTraits(persona.traits) +
+        endCapsule + endDiv + endDiv;
     }
     
     function encapsulatePhysical(physical) {
@@ -473,17 +422,102 @@ $(document).ready(function() {
     function encapsulateTraits(traits) {
         return encapsulate(param.persona.traits.string, "") +
         beginCapsule +
-        encapsulate(param.persona.traits.good_traits, stringifyArray(traits.good_traits)) +
-        encapsulate(param.persona.traits.bad_traits, stringifyArray(traits.bad_traits)) +
-        encapsulate(param.persona.traits.caracteristics, stringifyArray(traits.caracteristics)) +
-        encapsulate(param.persona.traits.handicap, stringifyArray(traits.handicap)) +
+        encapsulate(param.persona.traits.good_traits, toEncapsulableArray(traits.good_traits)) +
+        encapsulate(param.persona.traits.bad_traits, toEncapsulableArray(traits.bad_traits)) +
+        encapsulate(param.persona.traits.caracteristics, toEncapsulableArray(traits.caracteristics)) +
+        encapsulate(param.persona.traits.handicap, toEncapsulableArray(traits.handicap)) +
         endCapsule;
     }
 
-    function stringifyArray(array) {
+    function toEncapsulableArray(array) {
         if(array == undefined) {
             return param.none;
         }
         return array.toString().replace(/,/g, ",</br>");
+    }
+
+    function encapsulate(title, value) {
+        var eTitle = beginTitle + title + endTitle;
+        var eValue = beginContent + value + endContent;
+        return eTitle + eValue;
+    }
+
+    /******************************************************/
+    /*******************CONSTRAINT CARDS*******************/
+    /******************************************************/
+
+    function getConstraintWritingCard() {
+        return beginCapsule + 
+        encapsulate(param.writing.theme, getInputTextWithId("c_theme")) +
+        encapsulate(param.writing.style, getInputTextWithId("c_style")) +
+        endCapsule;
+    }
+
+    function getConstraintPersonaCard() {
+        return beginCapsule + 
+        encapsulate(param.persona.name, getInputTextWithId("c_name")) +
+        encapsulate(param.persona.age, getInputNumberWithId("c_age")) +
+        encapsulate(param.persona.job, getInputTextWithId("c_job")) +
+        encapsulate(param.persona.role, getInputTextWithId("c_role")) +
+        encapsulate(param.persona.title, getInputTextWithId("c_title")) +
+        encapsulateConstraintPhysical() +
+        encapsulateConstraintTraits() +
+        endCapsule;
+    }
+    
+    function encapsulateConstraintPhysical() {
+        return encapsulate(param.persona.physical.string, "") +
+        beginCapsule +
+        encapsulate(param.persona.physical.gender.string, getInputTextWithId("c_gender")) +
+        encapsulate(param.persona.physical.height, getInputNumberWithId("c_height")) +
+        encapsulate(param.persona.physical.weight, getInputNumberWithId("c_weight")) +
+        encapsulate(param.persona.physical.hair_color, getInputTextWithId("c_hair_color")) +
+        encapsulate(param.persona.physical.hair_style, getInputTextWithId("c_hair_style")) +
+        encapsulate(param.persona.physical.eyes_color, getInputTextWithId("c_eyes_color")) +
+        encapsulate(param.persona.physical.face_shape, getInputTextWithId("c_face_shape")) +
+        encapsulate(param.persona.physical.morphology, getInputTextWithId("c_morphology")) +
+        endCapsule;
+    }
+    
+    function encapsulateConstraintTraits() {
+        return encapsulate(param.persona.traits.string, "") +
+        beginCapsule +
+        encapsulate(param.persona.traits.good_traits, getTextareaWithId("c_good_traits")) +
+        encapsulate(param.persona.traits.bad_traits, getTextareaWithId("c_bad_traits")) +
+        encapsulate(param.persona.traits.caracteristics, getTextareaWithId("c_caracteristics")) +
+        encapsulate(param.persona.traits.handicap, getTextareaWithId("c_handicap")) +
+        endCapsule;
+    }
+
+    function getInputTextWithId(id) {
+        return beginInputText + id + endInput;
+    }
+
+    function getInputNumberWithId(id) {
+        return beginInputNumber + id + endInput;
+    }
+
+    function getTextareaWithId(id) {
+        return beginTextarea + id + endTextarea;
+    }
+
+    /*******************************************************/
+    /******************ADDITIONAL FUNCTIONS*****************/
+    /*******************************************************/
+
+    function getRandomValueInArray(array) {
+        return array[Math.floor(Math.random()*array.length)];
+    }
+
+    function getRandomKeyInJson(json) {
+        return getRandomValueInArray(Object.keys(json));
+    }
+
+    function getRandomIntoInterval(min, max) {
+        return Math.floor(Math.random()*(max - min + 1)) + min;
+    }
+
+    function stringToJsonArray(string) {
+        return JSON.parse("[\"" + string.replace(/,/g, "\", \"") + "\"]")
     }
 });
