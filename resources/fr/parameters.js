@@ -43,6 +43,6 @@ param.persona.traits.string = "Traits:";
 param.persona.traits.good_traits = "Bons:";
 param.persona.traits.bad_traits = "Mauvais:";
 param.persona.traits.caracteristics = "Caractère:";
-param.persona.traits.handicaps = "Handicapes:";
+param.persona.traits.handicap = "Handicapes:";
 param.none = "Aucun";
 param.footer = "Plus de contenu à cette addresse : <a href=\"https://github.com/Manerial\"> https://github.com/Manerial</a>";
