@@ -1,12 +1,12 @@
 hair_colors = [
-    "Bleu",
+    "Blue",
     "Blond",
-    "Brun",
-    "Chatain",
+    "Brown",
+    "Brown",
     "Mauve",
-    "Noir",
-    "Platine",
-    "Rouge",
-    "Roux",
-    "Vert"
+    "Dark",
+    "Platinum",
+    "Red",
+    "Red",
+    "Green"
 ]

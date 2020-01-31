@@ -1,7 +1,7 @@
 face_shapes = [
-    "Allongé",
-    "Carré",
-    "Empaté",
+    "Long",
+    "Square",
+    "Impeded",
     "Oval",
-    "Rond"
+    "Round"
 ]

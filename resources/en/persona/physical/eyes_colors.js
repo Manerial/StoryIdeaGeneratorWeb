@@ -1,12 +1,12 @@
 eyes_colors = [
-    "Acier",
-    "Blanc",
-    "Bleu",
-    "Jaune",
-    "Marron",
-    "Rouge",
+    "Steel",
+    "White",
+    "Blue",
+    "Yellow",
+    "Brown",
+    "Red",
     "Turquoise",
-    "Vairon",
-    "Vert",
-    "Violet"
+    "Green",
+    "Purple",
+    "Minnow"
 ]

@@ -1,13 +1,12 @@
 hair_styles = [
-    "Brosse",
-    "Long bouclé",
-    "Long lisse",
-    "Carré",
-    "Chignon",
-    "Tresse",
-    "Tresse Affricaine",
-    "Frisé",
-    "Bouclé",
-    "Anglaises",
-    "Catogan"
+    "Brush",
+    "Long curly",
+    "Long smooth",
+    "Square",
+    "Bun",
+    "Braided",
+    "African braid",
+    "Curly",
+    "Very curly",
+    "Cadogan"
 ]

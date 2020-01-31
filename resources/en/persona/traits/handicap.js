@@ -1,13 +1,13 @@
 handicap = [
-    "Tetraplegique",
-    "Paraplegique",
-    "Cancéreux",
-    "Séropositif",
-    "Sourd",
-    "Muet",
-    "Aveugle",
+    "Tetraplegic",
+    "paraplegique",
+    "Cancerous",
+    "HIV positive",
+    "Deaf",
+    "Mute",
+    "Blinded",
     "Androphobe",
     "Gynophobe",
     "Aracknophobe",
-    "Claustrophobe"
+    "Claustrophobic"
 ]

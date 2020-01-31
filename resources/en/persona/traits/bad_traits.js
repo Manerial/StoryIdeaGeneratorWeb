@@ -1,13 +1,13 @@
 bad_traits = [
-    "Avide",
-    "Colerique",
-    "Fainéant",
-    "Fourbe",
-    "Jaloux",
-    "Meurtrier",
-    "Pessimiste",
-    "Possessif",
-    "Psychopathe",
-    "Obscène",
-    "Beauf"
+    "Greedy",
+    "Choleric",
+    "Lazy",
+    "Misleading",
+    "Jealous",
+    "Murderer",
+    "Pessimistic",
+    "Possessive",
+    "Psychopath",
+    "Obscene",
+    "Redneck"
 ]
